@@ -17,11 +17,9 @@
         </dl>
         <div class="row" style="justify-content:flex-end;margin-top:14px">
             <a href="{{ route('admin.surat-tugas.index') }}" class="btn">Tutup</a>
-            <a href="{{ route('admin.report.surat-tugas', $item) }}" class="btn">📄 Surat Tugas (PDF)</a>
-            <a href="{{ route('admin.report.surat-tugas', ['suratTuga' => $item, 'format' => 'docx']) }}" class="btn btn-sm">.docx</a>
+            <a href="{{ route('admin.report.surat-tugas', $item) }}" class="btn">📄 Surat Tugas (DOCX)</a>
             @if ($item->audit_rating)
-                <a href="{{ route('admin.report.audit-report', $item) }}" class="btn">📊 Audit Report (PDF)</a>
-                <a href="{{ route('admin.report.audit-report', ['suratTuga' => $item, 'format' => 'docx']) }}" class="btn btn-sm">.docx</a>
+                <a href="{{ route('admin.report.audit-report', $item) }}" class="btn">📊 Audit Report (DOCX)</a>
             @endif
             <a href="{{ route('admin.surat-tugas.edit', $item) }}" class="btn btn-primary">Edit</a>
         </div>

@@ -19,10 +19,6 @@ class PdfConverter
             mkdir($outDir, 0755, true);
         }
 
-        if (! $this->canExec()) {
-            throw new RuntimeException('Server tidak mengizinkan shell_exec/proc_open. Fallback ke dompdf.');
-        }
-
         if ($soffice = $this->findLibreOffice()) {
             $this->convertWithLibreOffice($soffice, $docxPath, $pdfPath);
             return 'libreoffice';
@@ -38,9 +34,6 @@ class PdfConverter
 
     public function detect(): array
     {
-        if (! $this->canExec()) {
-            return ['libreoffice' => null, 'msword' => null];
-        }
         return [
             'libreoffice' => $this->findLibreOffice(),
             'msword' => PHP_OS_FAMILY === 'Windows' ? $this->findWord() : null,
@@ -62,24 +55,13 @@ class PdfConverter
                 return $c;
             }
         }
-        // Try PATH (only if shell_exec available — shared hosting biasanya disable)
-        if (function_exists('shell_exec') && ! in_array('shell_exec', array_map('trim', explode(',', (string) ini_get('disable_functions'))), true)) {
-            $which = PHP_OS_FAMILY === 'Windows' ? 'where soffice 2>NUL' : 'which soffice 2>/dev/null';
-            $out = @shell_exec($which);
-            if ($out && ($line = strtok(trim($out), "\n")) && is_file($line)) {
-                return $line;
-            }
+        // Try PATH
+        $which = PHP_OS_FAMILY === 'Windows' ? 'where soffice 2>NUL' : 'which soffice 2>/dev/null';
+        $out = @shell_exec($which);
+        if ($out && ($line = strtok(trim($out), "\n")) && is_file($line)) {
+            return $line;
         }
         return null;
-    }
-
-    private function canExec(): bool
-    {
-        if (! function_exists('shell_exec') || ! function_exists('proc_open')) {
-            return false;
-        }
-        $disabled = array_map('trim', explode(',', (string) ini_get('disable_functions')));
-        return ! in_array('shell_exec', $disabled, true) && ! in_array('proc_open', $disabled, true);
     }
 
     private function findWord(): ?string

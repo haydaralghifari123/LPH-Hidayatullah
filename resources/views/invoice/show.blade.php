@@ -18,11 +18,9 @@
         <div class="row" style="justify-content:flex-end;margin-top:14px">
             <a href="{{ route('admin.invoice.index') }}" class="btn">Tutup</a>
             @if ($item->perusahaan?->is_foreign)
-                <a href="{{ route('admin.report.invoice-ln', $item) }}" class="btn btn-primary">📄 Invoice LN (PDF)</a>
-                <a href="{{ route('admin.report.invoice-ln', ['invoice' => $item, 'format' => 'docx']) }}" class="btn btn-sm">.docx</a>
+                <a href="{{ route('admin.report.invoice-ln', $item) }}" class="btn btn-primary">📄 Invoice LN (DOCX)</a>
             @else
-                <a href="{{ route('admin.report.invoice', $item) }}" class="btn btn-primary">📄 Invoice (PDF)</a>
-                <a href="{{ route('admin.report.invoice', ['invoice' => $item, 'format' => 'docx']) }}" class="btn btn-sm">.docx</a>
+                <a href="{{ route('admin.report.invoice', $item) }}" class="btn btn-primary">📄 Invoice (DOCX)</a>
             @endif
         </div>
     </div>

@@ -41,6 +41,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::middleware('role:operasional,keuangan')->group(function () {
             Route::resource('auditor', AuditorController::class);
             Route::resource('perusahaan', PerusahaanController::class);
+            Route::get('/api/perusahaan/{perusahaan}/info', [PerusahaanController::class, 'apiInfo'])->name('api.perusahaan.info');
             Route::resource('surat-tugas', SuratTugasController::class)->parameters(['surat-tugas' => 'suratTuga']);
             Route::resource('sertifikat', SertifikatHalalController::class);
 

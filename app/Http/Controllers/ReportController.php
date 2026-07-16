@@ -175,32 +175,32 @@ class ReportController extends Controller
     }
 
     /**
-     * Render output as PDF by default. Pass ?format=docx to get the .docx source.
+     * Render output as DOCX by default (persis template). Pass ?format=pdf untuk PDF via dompdf.
      */
     private function render(Request $request, string $templateName, array $values, string $downloadNameBase): BinaryFileResponse
     {
-        $format = strtolower($request->query('format', 'pdf'));
+        $format = strtolower($request->query('format', 'docx'));
         $templatePath = storage_path("app/templates/{$templateName}");
 
-        if ($format === 'docx') {
-            $outputPath = storage_path('app/tmp/' . Str::random(16) . '.docx');
+        if ($format === 'pdf') {
+            $outputPath = storage_path('app/tmp/' . Str::random(16) . '.pdf');
             if (! is_dir(dirname($outputPath))) {
                 mkdir(dirname($outputPath), 0755, true);
             }
-            $this->docx->generate($templatePath, $values, $outputPath);
+            $this->docx->generatePdf($templatePath, $values, $outputPath);
             return response()
-                ->download($outputPath, "{$downloadNameBase}.docx", [
-                    'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                ->download($outputPath, "{$downloadNameBase}.pdf", [
+                    'Content-Type' => 'application/pdf',
                 ])
                 ->deleteFileAfterSend(true);
         }
 
-        // default: PDF
-        $outputPath = storage_path('app/tmp/' . Str::random(16) . '.pdf');
+        // default: DOCX (persis template)
+        $outputPath = storage_path('app/tmp/' . Str::random(16) . '.docx');
         if (! is_dir(dirname($outputPath))) {
             mkdir(dirname($outputPath), 0755, true);
         }
-        $this->docx->generatePdf($templatePath, $values, $outputPath);
+        $this->docx->generate($templatePath, $values, $outputPath);
 
         return response()
             ->download($outputPath, "{$downloadNameBase}.pdf", [

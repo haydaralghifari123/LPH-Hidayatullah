@@ -19,8 +19,7 @@
         </dl>
         @if ($perusahaan->is_foreign)
             <div class="row" style="justify-content:flex-end;margin-top:10px">
-                <a href="{{ route('admin.report.statement-letter', $perusahaan) }}" class="btn">📄 Statement Letter (PDF)</a>
-                <a href="{{ route('admin.report.statement-letter', ['perusahaan' => $perusahaan, 'format' => 'docx']) }}" class="btn btn-sm">.docx</a>
+                <a href="{{ route('admin.report.statement-letter', $perusahaan) }}" class="btn">📄 Statement Letter (DOCX)</a>
             </div>
         @endif
     </div>

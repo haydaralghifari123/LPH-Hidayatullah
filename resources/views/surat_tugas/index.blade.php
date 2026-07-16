@@ -39,7 +39,7 @@
                         </td>
                         <td>
                             <a class="btn btn-sm" href="{{ route('admin.surat-tugas.show', $st) }}">Detail</a>
-                            <a class="btn btn-sm" href="{{ route('admin.report.surat-tugas', $st) }}" title="Download DOCX">📄</a>
+                            <a class="btn btn-sm" href="{{ route('admin.report.surat-tugas', $st) }}" title="Download DOCX (persis template)">📄</a>
                             <a class="btn btn-sm" href="{{ route('admin.surat-tugas.edit', $st) }}">Edit</a>
                             <form method="POST" action="{{ route('admin.surat-tugas.destroy', $st) }}" style="display:inline" onsubmit="return confirm('Hapus surat tugas?')">@csrf @method('DELETE')
                                 <button class="btn btn-sm btn-danger">Hapus</button>

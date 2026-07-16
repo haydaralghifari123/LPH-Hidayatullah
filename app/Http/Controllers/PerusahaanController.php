@@ -61,6 +61,42 @@ class PerusahaanController extends Controller
         return redirect()->route('admin.perusahaan.index')->with('success', 'Dihapus.');
     }
 
+    /**
+     * API endpoint untuk auto-fill form. Return JSON info perusahaan + penawaran terbaru.
+     */
+    public function apiInfo(Perusahaan $perusahaan)
+    {
+        $latest = $perusahaan->penawarans()->latest()->first();
+        return response()->json([
+            'perusahaan' => [
+                'nama_pelaku_usaha' => $perusahaan->nama_pelaku_usaha,
+                'no_ref' => $perusahaan->no_ref,
+                'merek_dagang' => $perusahaan->merek_dagang,
+                'jenis_ajuan' => $perusahaan->jenis_ajuan,
+                'skala' => $perusahaan->skala,
+                'jenis_produk' => $perusahaan->jenis_produk,
+                'alamat' => $perusahaan->alamat,
+                'kota' => $perusahaan->kota,
+                'provinsi' => $perusahaan->provinsi,
+                'is_foreign' => (bool) $perusahaan->is_foreign,
+                'jumlah_produk' => $perusahaan->jumlah_produk,
+                'jumlah_pabrik' => $perusahaan->jumlah_pabrik,
+                'jumlah_bahan' => $perusahaan->jumlah_bahan,
+                'lokasi_full' => trim(($perusahaan->alamat ?? '') . ($perusahaan->alamat ? ', ' : '') . ($perusahaan->kota ?? '') . ', ' . ($perusahaan->provinsi ?? ''), ', '),
+            ],
+            'latest_penawaran' => $latest ? [
+                'no_penawaran' => $latest->no_penawaran,
+                'hok_jumlah_produk' => $latest->hok_jumlah_produk,
+                'biaya_bpjph' => (float) $latest->biaya_bpjph,
+                'biaya_lph' => (float) $latest->biaya_lph,
+                'biaya_transportasi' => (float) $latest->biaya_transportasi,
+                'biaya_uji_lab' => (float) $latest->biaya_uji_lab,
+                'total_biaya' => (float) $latest->total_biaya,
+                'mata_uang' => $latest->mata_uang,
+            ] : null,
+        ]);
+    }
+
     private function validateData(Request $request): array
     {
         return $request->validate([

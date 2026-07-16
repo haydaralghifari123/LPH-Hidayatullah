@@ -18,11 +18,9 @@
         <div class="row" style="justify-content:flex-end;margin-top:14px">
             <a href="{{ route('admin.penawaran.index') }}" class="btn">Tutup</a>
             @if ($item->perusahaan?->is_foreign)
-                <a href="{{ route('admin.report.quotation', $item) }}" class="btn btn-primary">📄 Quotation LN (PDF)</a>
-                <a href="{{ route('admin.report.quotation', ['penawaran' => $item, 'format' => 'docx']) }}" class="btn btn-sm">.docx</a>
+                <a href="{{ route('admin.report.quotation', $item) }}" class="btn btn-primary">📄 Quotation LN (DOCX)</a>
             @else
-                <a href="{{ route('admin.report.pembiayaan', $item) }}" class="btn btn-primary">📄 Surat Pembiayaan (PDF)</a>
-                <a href="{{ route('admin.report.pembiayaan', ['penawaran' => $item, 'format' => 'docx']) }}" class="btn btn-sm">.docx</a>
+                <a href="{{ route('admin.report.pembiayaan', $item) }}" class="btn btn-primary">📄 Surat Pembiayaan (DOCX)</a>
             @endif
         </div>
     </div>

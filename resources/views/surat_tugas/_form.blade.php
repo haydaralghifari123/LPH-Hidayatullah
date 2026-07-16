@@ -3,12 +3,13 @@
     <div class="field"><label>No. Surat (auto-generate)</label><input name="no_surat" value="{{ old('no_surat', $item->no_surat ?? '') }}" placeholder="ST-YYYY-XXXX"></div>
     <div class="field"><label>Tanggal Terbit *</label><input type="date" name="tanggal_terbit" value="{{ old('tanggal_terbit', optional($item->tanggal_terbit ?? null)->format('Y-m-d') ?? date('Y-m-d')) }}" required></div>
     <div class="field"><label>Perusahaan / Pelaku Usaha *</label>
-        <select name="perusahaan_id" required>
+        <select name="perusahaan_id" id="perusahaanSelect" required data-autofill-url="{{ url('admin/api/perusahaan') }}">
             <option value="">— Pilih Pengajuan —</option>
             @foreach ($perusahaans as $p)
                 <option value="{{ $p->id }}" @selected(old('perusahaan_id', $item->perusahaan_id ?? null)==$p->id)>{{ $p->no_ref }} — {{ $p->nama_pelaku_usaha }}</option>
             @endforeach
         </select>
+        <small class="muted" id="autofillInfo" style="font-size:11px;color:var(--muted);margin-top:4px;display:none"></small>
     </div>
     <div class="field"><label>Auditor *</label>
         <select name="auditor_id" required>
@@ -41,3 +42,31 @@
     <a href="{{ route('admin.surat-tugas.index') }}" class="btn">Batal</a>
     <button class="btn btn-primary" type="submit">Simpan Surat Tugas</button>
 </div>
+
+<script>
+(function () {
+    var sel = document.getElementById('perusahaanSelect');
+    var info = document.getElementById('autofillInfo');
+    if (!sel) return;
+    sel.addEventListener('change', function () {
+        if (!sel.value) { info.style.display = 'none'; return; }
+        info.style.display = 'block';
+        info.textContent = '⏳ Mengambil data...';
+        fetch(sel.dataset.autofillUrl + '/' + sel.value + '/info', { headers: { 'Accept': 'application/json' } })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                var p = data.perusahaan;
+                var lokasi = document.querySelector('[name="lokasi"]');
+                var scope = document.querySelector('[name="scope_audit"]');
+                if (lokasi && !lokasi.value.trim()) lokasi.value = p.lokasi_full;
+                if (scope && !scope.value.trim()) scope.value = p.jenis_ajuan;
+                info.innerHTML = '✓ Lokasi pre-filled dari alamat perusahaan';
+                info.style.color = 'var(--success)';
+            })
+            .catch(function () {
+                info.textContent = '⚠ Gagal mengambil data';
+                info.style.color = 'var(--danger)';
+            });
+    });
+})();
+</script>
