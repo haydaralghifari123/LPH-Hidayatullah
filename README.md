@@ -2,7 +2,7 @@
 
 Aplikasi Laravel untuk mengelola alur kerja Lembaga Pemeriksa Halal (LPH) Hidayatullah:
 pengajuan klien, dokumen audit, penugasan auditor, penerbitan sertifikat, penawaran biaya,
-biaya client, dan invoice. Dibangun berdasarkan dokumen PIDB 23.62.0209 dan mockup UI Figma.
+biaya client, dan invoice.
 
 ## Stack
 
